@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
-import { findDemoUserByEmail, type DemoRole } from '@/lib/demo-users';
+import { findActiveUserByEmail, findActiveUserById } from '@/lib/data/users';
+import type { DemoRole } from '@/lib/demo-users';
 
 export const SESSION_COOKIE_NAME = 'bommgmt_session';
 
@@ -11,7 +12,7 @@ export type SessionPayload = {
 };
 
 export async function createDemoSession({ email }: { email: string }): Promise<SessionPayload> {
-  const user = findDemoUserByEmail(email);
+  const user = await findActiveUserByEmail(email);
 
   if (!user) {
     throw new Error(`Unknown demo user: ${email}`);
@@ -59,7 +60,19 @@ export async function getSession() {
   }
 
   try {
-    return decodeSession(sessionCookie.value);
+    const decodedSession = decodeSession(sessionCookie.value);
+    const persistedUser = await findActiveUserById(decodedSession.userId);
+
+    if (!persistedUser) {
+      return null;
+    }
+
+    return {
+      role: persistedUser.role,
+      userEmail: persistedUser.email,
+      userId: persistedUser.id,
+      userName: persistedUser.name,
+    } satisfies SessionPayload;
   } catch {
     return null;
   }
