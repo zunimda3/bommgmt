@@ -6,6 +6,12 @@ export function DashboardOverview() {
         gap: '1.25rem',
       }}
     >
+      <div>
+        <p style={{ margin: 0, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+          Workspace
+        </p>
+        <h1 style={{ marginBottom: 0 }}>Dashboard</h1>
+      </div>
       <article
         style={{
           padding: '1.5rem',

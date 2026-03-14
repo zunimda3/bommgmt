@@ -19,7 +19,12 @@ export type AggregatePurchasingRow = {
   vendor: string;
 };
 
-function buildAggregateKey(item: Omit<AggregatePurchasingRow, 'totalQuantity'>) {
+type AggregateKeyInput = Pick<
+  AggregatePurchasingRow,
+  'projectId' | 'partNumber' | 'partDescription' | 'vendor' | 'partCategory'
+>;
+
+function buildAggregateKey(item: AggregateKeyInput) {
   return [
     item.projectId,
     item.partNumber,

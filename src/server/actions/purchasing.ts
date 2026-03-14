@@ -65,7 +65,18 @@ export async function getPurchasingView(projectId: string) {
         ...workflow,
       };
     })
-    .filter(Boolean);
+    .filter(
+      (
+        value,
+      ): value is {
+        aggregateKey: string;
+        notes?: string | null;
+        poNumber?: string | null;
+        quotedPrice?: number | null;
+        status?: string | null;
+        supplierSelected?: string | null;
+      } => value !== null,
+    );
 
   return mergeWorkflowFields({
     existing,
