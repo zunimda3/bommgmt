@@ -1,7 +1,10 @@
 import { canEditBom } from '@/lib/permissions';
-import { DEMO_PROJECTS } from '@/lib/demo-projects';
+import { createPersistedBomItem } from '@/lib/data/bom';
+import { syncProjectPurchasingItems } from '@/lib/data/purchasing';
+import { getProjectById } from '@/lib/data/projects';
 import type { AggregatePartCategory } from '@/lib/purchasing/aggregate';
 import type { DemoRole } from '@/lib/demo-users';
+import { bomItemInputSchema } from '@/lib/validators/bom';
 
 type CreateBomItemInput = {
   actor: {
@@ -21,7 +24,7 @@ type CreateBomItemInput = {
 };
 
 export async function createBomItem({ actor, input, moduleId, projectId }: CreateBomItemInput) {
-  const project = DEMO_PROJECTS.find((entry) => entry.id === projectId);
+  const project = await getProjectById(projectId);
 
   if (!project) {
     throw new Error('Project not found');
@@ -39,14 +42,13 @@ export async function createBomItem({ actor, input, moduleId, projectId }: Creat
     throw new Error('Module not found');
   }
 
-  const nextItemCode = module.items.length + 1;
-  const nextItem = {
-    id: `${moduleId}-item-${nextItemCode}`,
-    itemCode: nextItemCode,
-    ...input,
-  };
+  const parsedInput = bomItemInputSchema.parse(input);
+  const nextItem = await createPersistedBomItem({
+    ...parsedInput,
+    projectModuleId: moduleId,
+  });
 
-  module.items.push(nextItem);
+  await syncProjectPurchasingItems(projectId);
 
   return nextItem;
 }

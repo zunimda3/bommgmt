@@ -45,3 +45,29 @@ export async function listAggregateBomItems(projectId: string): Promise<Aggregat
     quantity: item.quantity,
   }));
 }
+
+export async function createPersistedBomItem(input: {
+  partCategory: 'fabrication' | 'standard_part' | 'modifications';
+  partDescription: string;
+  partNumber: string;
+  price: number;
+  projectModuleId: string;
+  quantity: number;
+  vendor: string;
+}) {
+  const lastItem = await db.bomItem.findFirst({
+    where: {
+      projectModuleId: input.projectModuleId,
+    },
+    orderBy: {
+      itemCode: 'desc',
+    },
+  });
+
+  return db.bomItem.create({
+    data: {
+      ...input,
+      itemCode: (lastItem?.itemCode ?? 0) + 1,
+    },
+  });
+}
