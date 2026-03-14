@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { PurchasingTable } from '@/components/purchasing/purchasing-table';
 
-test('renders purchasing workflow fields directly in the table', () => {
+test('renders purchasing workflow fields and header filters directly in the table', () => {
   render(
     <PurchasingTable
       rows={[
@@ -42,6 +42,9 @@ test('renders purchasing workflow fields directly in the table', () => {
   expect(screen.getByRole('columnheader', { name: /quoted price/i })).toBeInTheDocument();
   expect(screen.getByRole('columnheader', { name: /po number/i })).toBeInTheDocument();
   expect(screen.getByRole('columnheader', { name: /notes/i })).toBeInTheDocument();
+  expect(screen.getByLabelText(/part number filter/i)).toBeInTheDocument();
+  expect(screen.getByLabelText(/category filter/i)).toBeInTheDocument();
+  expect(screen.getByLabelText(/status filter/i)).toBeInTheDocument();
 
   expect(screen.getByRole('cell', { name: 'quoted' })).toBeInTheDocument();
   expect(screen.getByRole('cell', { name: 'Best Supply' })).toBeInTheDocument();
@@ -50,4 +53,21 @@ test('renders purchasing workflow fields directly in the table', () => {
   expect(screen.getByRole('cell', { name: 'Ready to order' })).toBeInTheDocument();
 
   expect(screen.getAllByText('Not set')).toHaveLength(4);
+
+  fireEvent.change(screen.getByLabelText(/supplier selected filter/i), {
+    target: { value: 'best' },
+  });
+
+  expect(screen.getByText('CF-100')).toBeInTheDocument();
+  expect(screen.queryByText('CF-200')).not.toBeInTheDocument();
+
+  fireEvent.change(screen.getByLabelText(/supplier selected filter/i), {
+    target: { value: '' },
+  });
+  fireEvent.change(screen.getByLabelText(/status filter/i), {
+    target: { value: 'pending' },
+  });
+
+  expect(screen.queryByText('CF-100')).not.toBeInTheDocument();
+  expect(screen.getByText('CF-200')).toBeInTheDocument();
 });
