@@ -54,3 +54,34 @@ test('purchaser can save purchasing workflow and see it in the table', async ({ 
   await expect(page.getByLabel(/po number/i)).toHaveValue('PO-2026-9');
   await expect(page.getByLabel(/purchasing notes/i)).toHaveValue('Expedite for week 18');
 });
+
+test('header filters narrow rows in bom and purchasing tables', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /log in/i }).click();
+  await page.getByLabel(/demo user/i).selectOption('designer@demo.local');
+  await page.getByRole('button', { name: /enter app/i }).click();
+  await page.getByRole('link', { name: /projects/i }).click();
+  await page.getByRole('link', { name: /open project/i }).click();
+  await page.getByRole('link', { name: /^bom$/i }).click();
+  await page.waitForTimeout(1500);
+
+  await page.getByLabel(/conveyor frame part category filter/i).evaluate((element) => {
+    const select = element as HTMLSelectElement;
+    select.value = 'standard_part';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await expect(page.getByText('CF-200')).toBeVisible();
+  await expect(page.getByText('Leveling foot')).toBeVisible();
+  await expect(page.getByText('CF-100')).toHaveCount(0);
+
+  await page.goto(page.url().replace(/\/bom$/, '/purchasing'));
+  await page.waitForTimeout(1500);
+  await page.getByLabel(/category filter/i).evaluate((element) => {
+    const select = element as HTMLSelectElement;
+    select.value = 'standard_part';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await expect(page.getByText('CF-200')).toBeVisible();
+  await expect(page.getByText('Leveling foot')).toBeVisible();
+  await expect(page.getByText('CF-100')).toHaveCount(0);
+});

@@ -54,7 +54,23 @@ export default async function BomPage({ params }: BomPageProps) {
         projectId={project.id}
       />
       {project.modules.map((module) => (
-        <ModuleTable key={module.id} module={module} />
+        <ModuleTable
+          key={module.id}
+          module={{
+            id: module.id,
+            name: module.name,
+            bomItems: module.bomItems.map((item) => ({
+              id: item.id,
+              itemCode: item.itemCode,
+              partNumber: item.partNumber,
+              partDescription: item.partDescription,
+              vendor: item.vendor,
+              partCategory: item.partCategory,
+              quantity: item.quantity,
+              price: Number(item.price),
+            })),
+          }}
+        />
       ))}
     </section>
   );
