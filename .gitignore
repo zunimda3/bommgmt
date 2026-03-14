@@ -1,4 +1,7 @@
 .worktrees/
+.env
+.env.local
+.env.test
 node_modules/
 .next/
 playwright-report/
