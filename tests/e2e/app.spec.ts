@@ -36,10 +36,10 @@ test('purchaser can save purchasing workflow and see it in the table', async ({ 
 
   await page.getByLabel(/purchasing item/i).selectOption({ label: 'CF-100' });
   await page.getByLabel(/purchasing status/i).selectOption('ordered');
-  await page.getByLabel(/supplier selected/i).fill('North Supply');
-  await page.getByLabel(/quoted price/i).fill('152.75');
-  await page.getByLabel(/po number/i).fill('PO-2026-9');
-  await page.getByLabel(/purchasing notes/i).fill('Expedite for week 18');
+  await page.getByLabel(/^Supplier selected$/i).fill('North Supply');
+  await page.getByLabel(/^Quoted price$/i).fill('152.75');
+  await page.getByLabel(/^PO number$/i).fill('PO-2026-9');
+  await page.getByLabel(/^Purchasing notes$/i).fill('Expedite for week 18');
   await page.getByRole('button', { name: /save purchasing workflow/i }).click();
 
   await expect(page.getByRole('cell', { name: 'ordered' })).toBeVisible();
@@ -49,10 +49,10 @@ test('purchaser can save purchasing workflow and see it in the table', async ({ 
   await expect(page.getByRole('cell', { name: 'Expedite for week 18' })).toBeVisible();
 
   await expect(page.getByLabel(/purchasing status/i)).toHaveValue('ordered');
-  await expect(page.getByLabel(/supplier selected/i)).toHaveValue('North Supply');
-  await expect(page.getByLabel(/quoted price/i)).toHaveValue('152.75');
-  await expect(page.getByLabel(/po number/i)).toHaveValue('PO-2026-9');
-  await expect(page.getByLabel(/purchasing notes/i)).toHaveValue('Expedite for week 18');
+  await expect(page.getByLabel(/^Supplier selected$/i)).toHaveValue('North Supply');
+  await expect(page.getByLabel(/^Quoted price$/i)).toHaveValue('152.75');
+  await expect(page.getByLabel(/^PO number$/i)).toHaveValue('PO-2026-9');
+  await expect(page.getByLabel(/^Purchasing notes$/i)).toHaveValue('Expedite for week 18');
 });
 
 test('header filters narrow rows in bom and purchasing tables', async ({ page }) => {
