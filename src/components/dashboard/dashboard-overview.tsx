@@ -1,4 +1,13 @@
-export function DashboardOverview() {
+type DashboardOverviewProps = {
+  activeProjectCount: number;
+  announcement: {
+    body: string;
+    title: string;
+  } | null;
+  projectCount: number;
+};
+
+export function DashboardOverview({ activeProjectCount, announcement, projectCount }: DashboardOverviewProps) {
   return (
     <section
       style={{
@@ -23,9 +32,9 @@ export function DashboardOverview() {
         <p style={{ margin: 0, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
           Announcement
         </p>
-        <h2 style={{ marginBottom: '0.5rem' }}>Owner Bulletin</h2>
+        <h2 style={{ marginBottom: '0.5rem' }}>{announcement?.title ?? 'No announcements yet'}</h2>
         <p style={{ margin: 0, color: 'var(--color-muted)', lineHeight: 1.6 }}>
-          Stay aligned on active project changes, procurement risks, and priority updates from the owner team.
+          {announcement?.body ?? 'Owner updates will appear here once announcements are published.'}
         </p>
       </article>
 
@@ -45,7 +54,9 @@ export function DashboardOverview() {
           }}
         >
           <h3 style={{ marginTop: 0 }}>Projects</h3>
-          <p style={{ marginBottom: 0, color: 'var(--color-muted)' }}>Jump into assigned or managed project work.</p>
+          <p style={{ marginBottom: 0, color: 'var(--color-muted)' }}>
+            {projectCount} total projects in the shared workspace.
+          </p>
         </article>
         <article
           style={{
@@ -57,7 +68,7 @@ export function DashboardOverview() {
         >
           <h3 style={{ marginTop: 0 }}>Purchasing sync</h3>
           <p style={{ marginBottom: 0, color: 'var(--color-muted)' }}>
-            Purchasing totals will follow BOM changes once project workflows are active.
+            {activeProjectCount} active projects are ready for BOM and purchasing coordination.
           </p>
         </article>
       </div>

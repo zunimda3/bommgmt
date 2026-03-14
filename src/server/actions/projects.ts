@@ -1,4 +1,5 @@
 import { canReadProject } from '@/lib/permissions';
+import { getProjectById, listVisibleProjectsForUser } from '@/lib/data/projects';
 import { DEMO_PROJECTS, findDemoProject } from '@/lib/demo-projects';
 import { aggregateBomItems } from '@/lib/purchasing/aggregate';
 import type { DemoRole } from '@/lib/demo-users';
@@ -11,14 +12,16 @@ type VisibleProjectsInput = {
 };
 
 export async function visibleProjectsForUser({ user }: VisibleProjectsInput) {
-  return DEMO_PROJECTS.filter((project) => {
+  const projects = await listVisibleProjectsForUser(user);
+
+  return projects.filter((project) => {
     const isAssigned = project.designerId === user.id || project.purchaserId === user.id;
     return canReadProject({ role: user.role, isAssigned });
   });
 }
 
 export async function getProjectDetail(projectId: string) {
-  return findDemoProject(projectId) ?? null;
+  return getProjectById(projectId);
 }
 
 export async function getProjectPurchasingRows(projectId: string) {

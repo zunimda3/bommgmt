@@ -1,7 +1,10 @@
-import type { DemoUser } from '@/lib/demo-users';
-
 type UserTableProps = {
-  users: DemoUser[];
+  users: Array<{
+    email: string;
+    id: string;
+    name: string;
+    role: string;
+  }>;
 };
 
 export function UserTable({ users }: UserTableProps) {

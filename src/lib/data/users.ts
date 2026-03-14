@@ -17,3 +17,9 @@ export async function findActiveUserById(id: string) {
     },
   });
 }
+
+export async function listUsers() {
+  return db.user.findMany({
+    orderBy: [{ role: 'asc' }, { name: 'asc' }],
+  });
+}

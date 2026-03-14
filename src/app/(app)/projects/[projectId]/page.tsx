@@ -19,7 +19,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
   return (
     <div style={{ display: 'grid', gap: '1rem' }}>
-      <TeamList designerName="Daniel Designer" purchaserName="Priya Purchaser" />
+      <TeamList
+        designerName={project.designer?.name ?? 'Unassigned'}
+        purchaserName={project.purchaser?.name ?? 'Unassigned'}
+      />
       <ProjectOverview project={project} />
     </div>
   );

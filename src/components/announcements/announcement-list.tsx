@@ -1,7 +1,9 @@
-import type { DemoAnnouncement } from '@/lib/demo-announcements';
-
 type AnnouncementListProps = {
-  announcements: DemoAnnouncement[];
+  announcements: Array<{
+    body: string;
+    id: string;
+    title: string;
+  }>;
 };
 
 export function AnnouncementList({ announcements }: AnnouncementListProps) {

@@ -1,4 +1,5 @@
 import { DEMO_ANNOUNCEMENTS } from '@/lib/demo-announcements';
+import { listAnnouncements as listPersistedAnnouncements } from '@/lib/data/announcements';
 import type { DemoRole } from '@/lib/demo-users';
 
 type CreateAnnouncementInput = {
@@ -27,6 +28,6 @@ export async function createAnnouncement({ actor, input }: CreateAnnouncementInp
   return nextAnnouncement;
 }
 
-export function listAnnouncements() {
-  return DEMO_ANNOUNCEMENTS;
+export async function listAnnouncements() {
+  return listPersistedAnnouncements();
 }

@@ -1,4 +1,5 @@
 import { canManageUsers } from '@/lib/permissions';
+import { listUsers as listPersistedUsers } from '@/lib/data/users';
 import { DEMO_USERS, type DemoRole } from '@/lib/demo-users';
 
 type CreateUserInput = {
@@ -29,5 +30,5 @@ export async function createUser({ actor, input }: CreateUserInput) {
 }
 
 export async function listUsers() {
-  return DEMO_USERS;
+  return listPersistedUsers();
 }

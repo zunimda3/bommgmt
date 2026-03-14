@@ -19,6 +19,8 @@ const DEMO_PROJECTS = [
     name: 'Packaging Cell Upgrade',
     description: 'Upgrade the packaging cell with a revised conveyor assembly and new guarding.',
     status: ProjectStatus.active,
+    assignDesigner: true,
+    assignPurchaser: true,
     modules: [
       {
         name: 'Conveyor Frame',
@@ -77,6 +79,8 @@ const DEMO_PROJECTS = [
     name: 'Inspection Station Retrofit',
     description: 'Retrofit an existing station with updated sensor mounts and cable management.',
     status: ProjectStatus.draft,
+    assignDesigner: false,
+    assignPurchaser: false,
     modules: [],
     purchasing: [],
   },
@@ -134,8 +138,8 @@ export async function seedDatabase() {
         description: project.description,
         status: project.status,
         createdById: owner.id,
-        designerId: designer?.id,
-        purchaserId: purchaser?.id,
+        designerId: project.assignDesigner ? designer?.id : null,
+        purchaserId: project.assignPurchaser ? purchaser?.id : null,
       },
     });
 

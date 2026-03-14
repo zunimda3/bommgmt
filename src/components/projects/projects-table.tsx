@@ -1,8 +1,12 @@
 import Link from 'next/link';
-import type { DemoProject } from '@/lib/demo-projects';
 
 type ProjectsTableProps = {
-  projects: DemoProject[];
+  projects: Array<{
+    code: string;
+    description: string;
+    id: string;
+    name: string;
+  }>;
 };
 
 export function ProjectsTable({ projects }: ProjectsTableProps) {

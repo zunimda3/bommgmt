@@ -1,8 +1,11 @@
 import Link from 'next/link';
-import type { DemoProject } from '@/lib/demo-projects';
 
 type ProjectOverviewProps = {
-  project: DemoProject;
+  project: {
+    description: string;
+    id: string;
+    name: string;
+  };
 };
 
 export function ProjectOverview({ project }: ProjectOverviewProps) {
