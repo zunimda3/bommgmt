@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { updatePurchasingWorkflowFromForm } from '@/server/actions/purchasing';
 
 type PurchasingWorkflowFormProps = {
@@ -5,7 +8,12 @@ type PurchasingWorkflowFormProps = {
   projectId: string;
   rows: Array<{
     aggregateKey: string;
+    notes: string | null;
     partNumber: string;
+    poNumber: string | null;
+    quotedPrice: number | null;
+    status: 'pending' | 'quoted' | 'ordered' | 'received';
+    supplierSelected: string | null;
   }>;
 };
 
@@ -18,7 +26,13 @@ export function PurchasingWorkflowForm({ canEdit, projectId, rows }: PurchasingW
     );
   }
 
+  if (!rows.length) {
+    return <p style={{ margin: 0, color: 'var(--color-muted)' }}>No purchasing rows available yet.</p>;
+  }
+
   const action = updatePurchasingWorkflowFromForm.bind(null, projectId);
+  const [selectedAggregateKey, setSelectedAggregateKey] = useState(rows[0].aggregateKey);
+  const selectedRow = rows.find((row) => row.aggregateKey === selectedAggregateKey) ?? rows[0];
 
   return (
     <form
@@ -33,23 +47,72 @@ export function PurchasingWorkflowForm({ canEdit, projectId, rows }: PurchasingW
       }}
     >
       <h2 style={{ margin: 0 }}>Update purchasing workflow</h2>
-      <select aria-label="Purchasing item" defaultValue={rows[0]?.aggregateKey ?? ''} name="aggregateKey" style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}>
+      <select
+        aria-label="Purchasing item"
+        name="aggregateKey"
+        onChange={(event) => {
+          setSelectedAggregateKey(event.target.value);
+        }}
+        style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+        value={selectedRow.aggregateKey}
+      >
         {rows.map((row) => (
           <option key={row.aggregateKey} value={row.aggregateKey}>
             {row.partNumber}
           </option>
         ))}
       </select>
-      <select aria-label="Purchasing status" defaultValue="pending" name="status" style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}>
-        <option value="pending">Pending</option>
-        <option value="quoted">Quoted</option>
-        <option value="ordered">Ordered</option>
-        <option value="received">Received</option>
-      </select>
-      <input aria-label="Supplier selected" name="supplierSelected" placeholder="Supplier selected" required style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }} type="text" />
-      <input aria-label="Quoted price" min="0" name="quotedPrice" placeholder="Quoted price" required step="0.01" style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }} type="number" />
-      <input aria-label="PO number" name="poNumber" placeholder="PO number" required style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }} type="text" />
-      <textarea aria-label="Purchasing notes" name="notes" placeholder="Notes" required rows={3} style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }} />
+      <div key={selectedRow.aggregateKey} style={{ display: 'grid', gap: '0.75rem' }}>
+        <select
+          aria-label="Purchasing status"
+          defaultValue={selectedRow.status}
+          name="status"
+          style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+        >
+          <option value="pending">Pending</option>
+          <option value="quoted">Quoted</option>
+          <option value="ordered">Ordered</option>
+          <option value="received">Received</option>
+        </select>
+        <input
+          aria-label="Supplier selected"
+          defaultValue={selectedRow.supplierSelected ?? ''}
+          name="supplierSelected"
+          placeholder="Supplier selected"
+          required
+          style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+          type="text"
+        />
+        <input
+          aria-label="Quoted price"
+          defaultValue={selectedRow.quotedPrice === null ? '' : selectedRow.quotedPrice}
+          min="0"
+          name="quotedPrice"
+          placeholder="Quoted price"
+          required
+          step="0.01"
+          style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+          type="number"
+        />
+        <input
+          aria-label="PO number"
+          defaultValue={selectedRow.poNumber ?? ''}
+          name="poNumber"
+          placeholder="PO number"
+          required
+          style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+          type="text"
+        />
+        <textarea
+          aria-label="Purchasing notes"
+          defaultValue={selectedRow.notes ?? ''}
+          name="notes"
+          placeholder="Notes"
+          required
+          rows={3}
+          style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
+        />
+      </div>
       <button
         type="submit"
         style={{

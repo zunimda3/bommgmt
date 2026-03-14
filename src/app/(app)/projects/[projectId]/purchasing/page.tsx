@@ -42,10 +42,7 @@ export default async function PurchasingPage({ params }: PurchasingPageProps) {
       <PurchasingWorkflowForm
         canEdit={canEdit}
         projectId={project.id}
-        rows={rows.map((row) => ({
-          aggregateKey: row.aggregateKey,
-          partNumber: row.partNumber,
-        }))}
+        rows={rows}
       />
       <PurchasingTable rows={rows} />
     </section>
