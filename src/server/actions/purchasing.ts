@@ -1,5 +1,5 @@
 import { canEditPurchasing } from '@/lib/permissions';
-import { mergeWorkflowFields } from '@/lib/purchasing/sync';
+import { getProjectPurchasingView as getPersistedProjectPurchasingView } from '@/lib/data/purchasing';
 import { getProjectPurchasingRows } from '@/server/actions/projects';
 import type { DemoRole } from '@/lib/demo-users';
 
@@ -52,48 +52,9 @@ export async function updatePurchasingWorkflow({
 }
 
 export async function getPurchasingView(projectId: string) {
-  const rows = await getProjectPurchasingRows(projectId);
-  const existing = rows
-    .map((row) => {
-      const workflow = purchasingWorkflowStore.get(row.aggregateKey);
-      if (!workflow) {
-        return null;
-      }
-
-      return {
-        aggregateKey: row.aggregateKey,
-        ...workflow,
-      };
-    })
-    .filter(
-      (
-        value,
-      ): value is {
-        aggregateKey: string;
-        notes?: string | null;
-        poNumber?: string | null;
-        quotedPrice?: number | null;
-        status?: string | null;
-        supplierSelected?: string | null;
-      } => value !== null,
-    );
-
-  return mergeWorkflowFields({
-    existing,
-    next: rows.map((row) => ({
-      aggregateKey: row.aggregateKey,
-      totalQuantity: row.totalQuantity,
-    })),
-  }).map((row) => {
-    const baseRow = rows.find((entry) => entry.aggregateKey === row.aggregateKey);
-
-    if (!baseRow) {
-      throw new Error('Missing purchasing row');
-    }
-
-    return {
-      ...baseRow,
-      ...row,
-    };
-  });
+  const persistedView = await getPersistedProjectPurchasingView(projectId);
+  return persistedView.map((row) => ({
+    ...row,
+    ...purchasingWorkflowStore.get(row.aggregateKey),
+  }));
 }

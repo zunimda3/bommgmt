@@ -1,7 +1,18 @@
-import type { DemoProjectModule } from '@/lib/demo-projects';
-
 type ModuleTableProps = {
-  module: DemoProjectModule;
+  module: {
+    bomItems: Array<{
+      id: string;
+      itemCode: number;
+      partCategory: string;
+      partDescription: string;
+      partNumber: string;
+      price: number | { toString(): string };
+      quantity: number;
+      vendor: string;
+    }>;
+    id: string;
+    name: string;
+  };
 };
 
 export function ModuleTable({ module }: ModuleTableProps) {
@@ -49,7 +60,7 @@ export function ModuleTable({ module }: ModuleTableProps) {
             </tr>
           </thead>
           <tbody>
-            {module.items.map((item) => (
+            {module.bomItems.map((item) => (
               <tr key={item.id}>
                 <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
                   {item.itemCode}
@@ -70,7 +81,7 @@ export function ModuleTable({ module }: ModuleTableProps) {
                   {item.quantity}
                 </td>
                 <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
-                  {item.price.toFixed(2)}
+                  {Number(item.price).toFixed(2)}
                 </td>
               </tr>
             ))}
