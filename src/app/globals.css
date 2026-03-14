@@ -4,12 +4,89 @@
 
 :root {
   color-scheme: light;
+  --color-ink: #1f1b16;
+  --color-muted: #6a6054;
+  --color-surface: #fffaf2;
+  --color-surface-strong: #efe5d4;
+  --color-accent: #9d4d1b;
+  --color-accent-soft: #f1d9be;
+  --color-border: #dccdb8;
+  --shadow-panel: 0 24px 60px rgba(40, 28, 16, 0.12);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: #f7f4ed;
-  color: #1f1b16;
+  color: var(--color-ink);
   font-family: Georgia, serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(223, 184, 136, 0.28), transparent 32%),
+    linear-gradient(180deg, #f7f4ed 0%, #efe7d8 100%);
+}
+
+.app-shell__sidebar {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid var(--color-border);
+  background: rgba(255, 250, 242, 0.7);
+  backdrop-filter: blur(18px);
+}
+
+.app-shell__brand {
+  margin: 0 0 2rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.app-shell__nav {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.app-shell__nav-link {
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  color: var(--color-muted);
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.app-shell__nav-link:hover {
+  border-color: var(--color-border);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--color-ink);
+}
+
+.app-shell__content {
+  padding: 2rem;
+}
+
+.app-shell__panel {
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+  border: 1px solid rgba(220, 205, 184, 0.9);
+  border-radius: 2rem;
+  background: rgba(255, 250, 242, 0.86);
+  box-shadow: var(--shadow-panel);
+}
+
+.app-shell__title {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2rem, 3vw, 3rem);
+  letter-spacing: -0.04em;
 }
