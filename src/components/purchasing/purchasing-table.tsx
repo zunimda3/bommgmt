@@ -1,7 +1,20 @@
-import type { AggregatePurchasingRow } from '@/lib/purchasing/aggregate';
+type PurchasingTableRow = {
+  aggregateKey: string;
+  notes: string | null;
+  partCategory: 'fabrication' | 'standard_part' | 'modifications';
+  partDescription: string;
+  partNumber: string;
+  poNumber: string | null;
+  projectId: string;
+  quotedPrice: number | null;
+  status: 'pending' | 'quoted' | 'ordered' | 'received';
+  supplierSelected: string | null;
+  totalQuantity: number;
+  vendor: string;
+};
 
 type PurchasingTableProps = {
-  rows: AggregatePurchasingRow[];
+  rows: PurchasingTableRow[];
 };
 
 export function PurchasingTable({ rows }: PurchasingTableProps) {
@@ -32,7 +45,18 @@ export function PurchasingTable({ rows }: PurchasingTableProps) {
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            {['Part number', 'Description', 'Vendor', 'Category', 'Total quantity'].map((label) => (
+            {[
+              'Part number',
+              'Description',
+              'Vendor',
+              'Category',
+              'Total quantity',
+              'Status',
+              'Supplier selected',
+              'Quoted price',
+              'PO number',
+              'Notes',
+            ].map((label) => (
               <th
                 key={label}
                 style={{
@@ -63,6 +87,21 @@ export function PurchasingTable({ rows }: PurchasingTableProps) {
               </td>
               <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
                 {row.totalQuantity}
+              </td>
+              <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
+                {row.status}
+              </td>
+              <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
+                {row.supplierSelected ?? 'Not set'}
+              </td>
+              <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
+                {row.quotedPrice === null ? 'Not set' : `$${row.quotedPrice.toFixed(2)}`}
+              </td>
+              <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
+                {row.poNumber ?? 'Not set'}
+              </td>
+              <td style={{ padding: '0.85rem 0.5rem', borderBottom: '1px solid rgba(220, 205, 184, 0.5)' }}>
+                {row.notes ?? 'Not set'}
               </td>
             </tr>
           ))}
