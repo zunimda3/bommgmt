@@ -1,16 +1,14 @@
-const DEMO_ANNOUNCEMENTS = [
-  {
-    id: 'announcement-1',
-    title: 'Quarter Kickoff',
-    body: 'Prioritize BOM accuracy this week so purchasing can begin supplier outreach without delay.',
-  },
-] as const;
+import type { DemoAnnouncement } from '@/lib/demo-announcements';
 
-export function AnnouncementList() {
+type AnnouncementListProps = {
+  announcements: DemoAnnouncement[];
+};
+
+export function AnnouncementList({ announcements }: AnnouncementListProps) {
   return (
     <section style={{ display: 'grid', gap: '1rem' }}>
       <h1 style={{ marginBottom: 0 }}>Announcements</h1>
-      {DEMO_ANNOUNCEMENTS.map((announcement) => (
+      {announcements.map((announcement) => (
         <article
           key={announcement.id}
           style={{
