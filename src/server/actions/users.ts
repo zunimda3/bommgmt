@@ -1,5 +1,9 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
 import { canManageUsers } from '@/lib/permissions';
 import { createPersistedUser, listUsers as listPersistedUsers } from '@/lib/data/users';
+import { requireCurrentUser } from '@/lib/auth/current-user';
 import type { DemoRole } from '@/lib/demo-users';
 import { userInputSchema } from '@/lib/validators/users';
 
@@ -27,4 +31,22 @@ export async function createUser({ actor, input }: CreateUserInput) {
 
 export async function listUsers() {
   return listPersistedUsers();
+}
+
+export async function createUserFromForm(formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await createUser({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    input: {
+      name: String(formData.get('name') ?? ''),
+      email: String(formData.get('email') ?? ''),
+      role: String(formData.get('role') ?? '') as DemoRole,
+    },
+  });
+
+  revalidatePath('/users');
 }

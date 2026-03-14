@@ -7,7 +7,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'pnpm next dev --port 3100',
+    command: 'pnpm e2e:serve',
     port: 3100,
     reuseExistingServer: false,
     timeout: 120000,

@@ -1,3 +1,7 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { requireCurrentUser } from '@/lib/auth/current-user';
 import { canEditBom } from '@/lib/permissions';
 import { createPersistedBomItem } from '@/lib/data/bom';
 import { syncProjectPurchasingItems } from '@/lib/data/purchasing';
@@ -51,4 +55,28 @@ export async function createBomItem({ actor, input, moduleId, projectId }: Creat
   await syncProjectPurchasingItems(projectId);
 
   return nextItem;
+}
+
+export async function createBomItemFromForm(projectId: string, formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await createBomItem({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    projectId,
+    moduleId: String(formData.get('moduleId') ?? ''),
+    input: {
+      partNumber: String(formData.get('partNumber') ?? ''),
+      partDescription: String(formData.get('partDescription') ?? ''),
+      vendor: String(formData.get('vendor') ?? ''),
+      partCategory: String(formData.get('partCategory') ?? 'fabrication') as AggregatePartCategory,
+      quantity: Number(formData.get('quantity') ?? 0),
+      price: Number(formData.get('price') ?? 0),
+    },
+  });
+
+  revalidatePath(`/projects/${projectId}/bom`);
+  revalidatePath(`/projects/${projectId}/purchasing`);
 }

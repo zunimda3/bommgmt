@@ -9,7 +9,9 @@
     "lint": "next lint",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:push": "prisma db push --skip-generate",
+    "e2e:serve": "node scripts/e2e-serve.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -3,7 +3,7 @@ type ExistingWorkflowRow = {
   notes?: string | null;
   poNumber?: string | null;
   quotedPrice?: number | null;
-  status?: string | null;
+  status?: 'pending' | 'quoted' | 'ordered' | 'received' | null;
   supplierSelected?: string | null;
 };
 

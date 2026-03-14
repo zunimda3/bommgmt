@@ -1,17 +1,20 @@
-import { createAnnouncementFromForm } from '@/server/actions/announcements';
+import { createProjectModuleFromForm } from '@/server/actions/projects';
 
-type AnnouncementFormProps = {
-  canCreate: boolean;
+type ModuleFormProps = {
+  canManage: boolean;
+  projectId: string;
 };
 
-export function AnnouncementForm({ canCreate }: AnnouncementFormProps) {
-  if (!canCreate) {
+export function ModuleForm({ canManage, projectId }: ModuleFormProps) {
+  if (!canManage) {
     return null;
   }
 
+  const action = createProjectModuleFromForm.bind(null, projectId);
+
   return (
     <form
-      action={createAnnouncementFromForm}
+      action={action}
       style={{
         display: 'grid',
         gap: '0.75rem',
@@ -21,22 +24,14 @@ export function AnnouncementForm({ canCreate }: AnnouncementFormProps) {
         border: '1px solid var(--color-border)',
       }}
     >
-      <h2 style={{ margin: 0 }}>Create announcement</h2>
+      <h2 style={{ margin: 0 }}>Create module</h2>
       <input
-        aria-label="Announcement title"
-        name="title"
-        placeholder="Title"
+        aria-label="Module name"
+        name="name"
+        placeholder="Module name"
         required
         style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
         type="text"
-      />
-      <textarea
-        aria-label="Announcement body"
-        name="body"
-        placeholder="Announcement body"
-        required
-        rows={4}
-        style={{ padding: '0.75rem 0.9rem', borderRadius: '0.9rem', border: '1px solid var(--color-border)' }}
       />
       <button
         type="submit"
@@ -50,7 +45,7 @@ export function AnnouncementForm({ canCreate }: AnnouncementFormProps) {
           cursor: 'pointer',
         }}
       >
-        Save announcement
+        Save module
       </button>
     </form>
   );

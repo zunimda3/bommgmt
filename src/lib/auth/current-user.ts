@@ -1,7 +1,11 @@
 import { getSession } from '@/lib/auth/session';
 
 export async function getCurrentUser() {
-  return getSession();
+  try {
+    return await getSession();
+  } catch {
+    return null;
+  }
 }
 
 export async function requireCurrentUser() {

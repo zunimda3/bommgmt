@@ -1,3 +1,7 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { requireCurrentUser } from '@/lib/auth/current-user';
 import { canEditPurchasing } from '@/lib/permissions';
 import { getProjectPurchasingView as getPersistedProjectPurchasingView, upsertPurchasingWorkflow } from '@/lib/data/purchasing';
 import { getProjectById } from '@/lib/data/projects';
@@ -71,4 +75,26 @@ export async function updatePurchasingWorkflow({
 
 export async function getPurchasingView(projectId: string) {
   return getPersistedProjectPurchasingView(projectId);
+}
+
+export async function updatePurchasingWorkflowFromForm(projectId: string, formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await updatePurchasingWorkflow({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    projectId,
+    purchasingItemId: String(formData.get('aggregateKey') ?? ''),
+    input: {
+      status: String(formData.get('status') ?? 'pending') as UpdatePurchasingWorkflowInput['input']['status'],
+      supplierSelected: String(formData.get('supplierSelected') ?? ''),
+      quotedPrice: Number(formData.get('quotedPrice') ?? 0),
+      poNumber: String(formData.get('poNumber') ?? ''),
+      notes: String(formData.get('notes') ?? ''),
+    },
+  });
+
+  revalidatePath(`/projects/${projectId}/purchasing`);
 }

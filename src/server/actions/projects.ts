@@ -1,3 +1,7 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { requireCurrentUser } from '@/lib/auth/current-user';
 import { canManageModules, canManageProjects, canReadProject } from '@/lib/permissions';
 import { listAggregateBomItems } from '@/lib/data/bom';
 import {
@@ -93,4 +97,43 @@ export async function createProjectModule({ actor, input, projectId }: CreatePro
     name: parsedInput.name,
     projectId,
   });
+}
+
+export async function createProjectFromForm(formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await createProject({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    input: {
+      code: String(formData.get('code') ?? ''),
+      name: String(formData.get('name') ?? ''),
+      description: String(formData.get('description') ?? ''),
+      status: String(formData.get('status') ?? 'draft') as CreateProjectInput['input']['status'],
+      designerId: String(formData.get('designerId') ?? '') || null,
+      purchaserId: String(formData.get('purchaserId') ?? '') || null,
+    },
+  });
+
+  revalidatePath('/projects');
+}
+
+export async function createProjectModuleFromForm(projectId: string, formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await createProjectModule({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    input: {
+      name: String(formData.get('name') ?? ''),
+    },
+    projectId,
+  });
+
+  revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/projects/${projectId}/bom`);
 }

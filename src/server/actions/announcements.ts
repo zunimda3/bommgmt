@@ -1,7 +1,11 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
 import {
   createPersistedAnnouncement,
   listAnnouncements as listPersistedAnnouncements,
 } from '@/lib/data/announcements';
+import { requireCurrentUser } from '@/lib/auth/current-user';
 import type { DemoRole } from '@/lib/demo-users';
 import { announcementInputSchema } from '@/lib/validators/announcements';
 
@@ -31,4 +35,22 @@ export async function createAnnouncement({ actor, input }: CreateAnnouncementInp
 
 export async function listAnnouncements() {
   return listPersistedAnnouncements();
+}
+
+export async function createAnnouncementFromForm(formData: FormData) {
+  const actor = await requireCurrentUser();
+
+  await createAnnouncement({
+    actor: {
+      id: actor.userId,
+      role: actor.role,
+    },
+    input: {
+      title: String(formData.get('title') ?? ''),
+      body: String(formData.get('body') ?? ''),
+    },
+  });
+
+  revalidatePath('/announcements');
+  revalidatePath('/dashboard');
 }
