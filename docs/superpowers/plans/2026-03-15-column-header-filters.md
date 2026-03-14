@@ -18,7 +18,7 @@
 - Create: `src/lib/table-filters.ts`
 - Create: `tests/unit/table-filters.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add tests covering:
 - case-insensitive partial matching for text filters
@@ -26,12 +26,12 @@ Add tests covering:
 - `AND` behavior when multiple filters are active
 - empty filter values behaving as no filter
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm vitest run tests/unit/table-filters.test.ts`
 Expected: FAIL because the helper does not exist yet.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Create `src/lib/table-filters.ts` with a small helper that:
 - normalizes cell values to strings
@@ -39,12 +39,12 @@ Create `src/lib/table-filters.ts` with a small helper that:
 - performs exact dropdown matching
 - evaluates all active filters together
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm vitest run tests/unit/table-filters.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/table-filters.ts tests/unit/table-filters.test.ts
@@ -59,7 +59,7 @@ git commit -m "test: cover table filter matching rules"
 - Modify: `src/components/bom/module-table.tsx`
 - Create: `tests/unit/module-table.test.tsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add a test that renders `ModuleTable` with multiple BOM rows and asserts that:
 - the old standalone `Filter items` field is gone
@@ -67,12 +67,12 @@ Add a test that renders `ModuleTable` with multiple BOM rows and asserts that:
 - typing into a text filter narrows rows
 - selecting `Part category` from a dropdown narrows rows
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm vitest run tests/unit/module-table.test.tsx`
 Expected: FAIL because the table still uses the old single filter field and has no header filters.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Update `src/components/bom/module-table.tsx` so it:
 - becomes a client component
@@ -82,12 +82,12 @@ Update `src/components/bom/module-table.tsx` so it:
 - uses a dropdown for `Part category`
 - filters only that module’s rows using the shared helper
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm vitest run tests/unit/module-table.test.tsx tests/unit/table-filters.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bom/module-table.tsx tests/unit/module-table.test.tsx
@@ -102,7 +102,7 @@ git commit -m "feat: add bom header filters"
 - Modify: `src/components/purchasing/purchasing-table.tsx`
 - Modify: `tests/unit/purchasing-table.test.tsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Extend the existing purchasing table test to assert that:
 - a filter control exists for every column
@@ -110,12 +110,12 @@ Extend the existing purchasing table test to assert that:
 - text filters hide non-matching rows
 - dropdown filters hide non-matching rows
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm vitest run tests/unit/purchasing-table.test.tsx`
 Expected: FAIL because the current table has no header filters.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Update `src/components/purchasing/purchasing-table.tsx` so it:
 - becomes a client component
@@ -124,12 +124,12 @@ Update `src/components/purchasing/purchasing-table.tsx` so it:
 - uses dropdowns for `Category` and `Status`
 - filters the rendered rows with the shared helper while preserving the visible workflow columns
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm vitest run tests/unit/purchasing-table.test.tsx tests/unit/table-filters.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/purchasing/purchasing-table.tsx tests/unit/purchasing-table.test.tsx
@@ -143,7 +143,7 @@ git commit -m "feat: add purchasing header filters"
 **Files:**
 - Modify: `tests/e2e/app.spec.ts`
 
-- [ ] **Step 1: Write the failing browser test**
+- [x] **Step 1: Write the failing browser test**
 
 Add an end-to-end test that:
 - logs in as a user who can reach the BOM table
@@ -151,16 +151,16 @@ Add an end-to-end test that:
 - navigates to purchasing
 - applies a purchasing header filter and verifies only matching rows remain
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `DATABASE_URL='postgresql://naim@localhost:5433/bommgmt?schema=public' SHADOW_DATABASE_URL='postgresql://naim@localhost:5433/bommgmt_shadow?schema=public' pnpm playwright test tests/e2e/app.spec.ts --grep "header filters"`
 Expected: FAIL because the real UI does not yet expose those controls.
 
-- [ ] **Step 3: Write minimal implementation adjustments if needed**
+- [x] **Step 3: Write minimal implementation adjustments if needed**
 
 If the component work already satisfies the browser test, keep this step to any small selector or label adjustments needed for stable e2e coverage.
 
-- [ ] **Step 4: Run targeted verification**
+- [x] **Step 4: Run targeted verification**
 
 Run:
 - `pnpm vitest run tests/unit/table-filters.test.ts tests/unit/module-table.test.tsx tests/unit/purchasing-table.test.tsx`
@@ -168,7 +168,7 @@ Run:
 
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tests/e2e/app.spec.ts
@@ -182,28 +182,28 @@ git commit -m "test: cover bom and purchasing header filters"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-03-15-column-header-filters.md`
 
-- [ ] **Step 1: Run unit tests**
+- [x] **Step 1: Run unit tests**
 
 Run:
 - `pnpm vitest run tests/unit/table-filters.test.ts tests/unit/module-table.test.tsx tests/unit/purchasing-table.test.tsx tests/unit/purchasing-sync.test.ts`
 
 Expected: PASS
 
-- [ ] **Step 2: Run browser tests**
+- [x] **Step 2: Run browser tests**
 
 Run:
 - `DATABASE_URL='postgresql://naim@localhost:5433/bommgmt?schema=public' SHADOW_DATABASE_URL='postgresql://naim@localhost:5433/bommgmt_shadow?schema=public' pnpm playwright test tests/e2e/app.spec.ts`
 
 Expected: PASS
 
-- [ ] **Step 3: Run production build**
+- [x] **Step 3: Run production build**
 
 Run:
 - `DATABASE_URL='postgresql://naim@localhost:5433/bommgmt?schema=public' SHADOW_DATABASE_URL='postgresql://naim@localhost:5433/bommgmt_shadow?schema=public' pnpm build`
 
 Expected: PASS when run separately from Playwright.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-03-15-column-header-filters.md
