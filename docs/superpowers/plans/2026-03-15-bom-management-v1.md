@@ -10,6 +10,10 @@
 
 ---
 
+## Documentation Maintenance Rule
+
+This plan includes a final human-documentation phase for non-technical readers. After each successful chunk, update the notes for that final phase with any notable product, setup, permission, workflow, or architecture changes introduced by the chunk. The final documentation must reflect the app as actually built, not just the original design.
+
 ## File Structure
 
 Create the app with focused units. Do not collapse everything into a small number of oversized files.
@@ -1062,9 +1066,80 @@ git add .
 git commit -m "chore: finalize bom management v1"
 ```
 
+## Chunk 8: Human Documentation And Handover
+
+### Task 20: Add Non-Technical Setup And Product Documentation
+
+**Files:**
+- Create: `README.md`
+- Create: `docs/setup-and-running.md`
+- Create: `docs/roles-and-permissions.md`
+- Create: `docs/architecture.md`
+- Create: `docs/maintenance-guide.md`
+- Modify: docs created in this chunk as later phases introduce notable behavior changes
+
+- [ ] **Step 1: Gather the final shipped behavior before writing docs**
+
+Review:
+- implemented pages and workflows
+- actual role/permission behavior
+- real local setup requirements for frontend and backend
+- database and seed commands
+- test and verification commands
+- notable limitations still present in v1
+
+- [ ] **Step 2: Write the root README for non-technical readers**
+
+Include:
+- what the app is and what it is for
+- the main features in simple language
+- the tech stack in plain language
+- the fastest path to get the app running locally
+- links to the deeper docs in `docs/`
+
+- [ ] **Step 3: Write the setup-and-running guide**
+
+Include step-by-step instructions for:
+- installing required tools
+- setting environment variables
+- starting PostgreSQL
+- preparing the database
+- seeding demo data
+- starting the frontend and backend parts of the app
+- opening the app in the browser
+- logging in with demo users
+- running tests
+
+Write this assuming the reader is non-technical and has never run this app before.
+
+- [ ] **Step 4: Write the roles, architecture, and maintenance docs**
+
+Implement:
+- `docs/roles-and-permissions.md`
+  - owner, admin, designer, purchaser
+  - what each role can read, create, edit, and delete
+- `docs/architecture.md`
+  - frontend, backend, database, demo auth, and BOM-to-purchasing flow in plain language
+- `docs/maintenance-guide.md`
+  - where important code lives
+  - how to update the database safely
+  - how to reseed/reset local data
+  - how to run verification checks
+  - working conventions and best-practice reminders for future maintainers
+
+- [ ] **Step 5: Verify the documentation against the real app and commit**
+
+Run through the written setup steps on a clean shell where practical, correct any mismatches, then commit:
+
+```bash
+git add README.md docs/setup-and-running.md docs/roles-and-permissions.md docs/architecture.md docs/maintenance-guide.md
+git commit -m "docs: add human-friendly setup and maintenance guides"
+```
+
 ## Notes For Execution
 
 - Prefer Prisma migrations once the schema stabilizes, but do not delay early implementation on migration naming perfection.
 - Keep authorization in server actions and reusable helpers. Do not rely on component-level hiding alone.
 - Do not denormalize BOM and purchasing ownership rules. BOM is the source of truth; purchasing workflow extends derived rows.
 - Keep UI components focused. If a table component becomes hard to reason about, split row rendering and form state into smaller files.
+- After every successful chunk, revisit `Chunk 8: Human Documentation And Handover` and record any new setup, permission, or workflow details that the final documentation must explain.
