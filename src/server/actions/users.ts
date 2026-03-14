@@ -1,6 +1,7 @@
 import { canManageUsers } from '@/lib/permissions';
-import { listUsers as listPersistedUsers } from '@/lib/data/users';
-import { DEMO_USERS, type DemoRole } from '@/lib/demo-users';
+import { createPersistedUser, listUsers as listPersistedUsers } from '@/lib/data/users';
+import type { DemoRole } from '@/lib/demo-users';
+import { userInputSchema } from '@/lib/validators/users';
 
 type CreateUserInput = {
   actor: {
@@ -19,14 +20,9 @@ export async function createUser({ actor, input }: CreateUserInput) {
     throw new Error('Owner only action');
   }
 
-  const nextUser = {
-    id: `${input.role}-${DEMO_USERS.length + 1}`,
-    ...input,
-  };
+  const parsedInput = userInputSchema.parse(input);
 
-  DEMO_USERS.push(nextUser);
-
-  return nextUser;
+  return createPersistedUser(parsedInput);
 }
 
 export async function listUsers() {

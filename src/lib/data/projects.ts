@@ -58,3 +58,39 @@ export async function getProjectSummaries() {
     activeProjectCount,
   };
 }
+
+export async function createPersistedProject(input: {
+  code: string;
+  createdById: string;
+  description: string;
+  designerId?: string | null;
+  name: string;
+  purchaserId?: string | null;
+  status: 'draft' | 'active' | 'completed' | 'archived';
+}) {
+  return db.project.create({
+    data: input,
+  });
+}
+
+export async function createPersistedProjectModule(input: {
+  name: string;
+  projectId: string;
+}) {
+  const lastModule = await db.projectModule.findFirst({
+    where: {
+      projectId: input.projectId,
+    },
+    orderBy: {
+      displayOrder: 'desc',
+    },
+  });
+
+  return db.projectModule.create({
+    data: {
+      name: input.name,
+      projectId: input.projectId,
+      displayOrder: (lastModule?.displayOrder ?? 0) + 1,
+    },
+  });
+}

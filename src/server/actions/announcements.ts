@@ -1,6 +1,9 @@
-import { DEMO_ANNOUNCEMENTS } from '@/lib/demo-announcements';
-import { listAnnouncements as listPersistedAnnouncements } from '@/lib/data/announcements';
+import {
+  createPersistedAnnouncement,
+  listAnnouncements as listPersistedAnnouncements,
+} from '@/lib/data/announcements';
 import type { DemoRole } from '@/lib/demo-users';
+import { announcementInputSchema } from '@/lib/validators/announcements';
 
 type CreateAnnouncementInput = {
   actor: {
@@ -18,14 +21,12 @@ export async function createAnnouncement({ actor, input }: CreateAnnouncementInp
     throw new Error('Not authorized to create announcements');
   }
 
-  const nextAnnouncement = {
-    id: `announcement-${DEMO_ANNOUNCEMENTS.length + 1}`,
-    ...input,
-  };
+  const parsedInput = announcementInputSchema.parse(input);
 
-  DEMO_ANNOUNCEMENTS.unshift(nextAnnouncement);
-
-  return nextAnnouncement;
+  return createPersistedAnnouncement({
+    ...parsedInput,
+    createdById: actor.id,
+  });
 }
 
 export async function listAnnouncements() {

@@ -23,3 +23,13 @@ export async function listUsers() {
     orderBy: [{ role: 'asc' }, { name: 'asc' }],
   });
 }
+
+export async function createPersistedUser(input: {
+  email: string;
+  name: string;
+  role: 'owner' | 'admin' | 'designer' | 'purchaser';
+}) {
+  return db.user.create({
+    data: input,
+  });
+}

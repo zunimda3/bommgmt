@@ -15,3 +15,13 @@ export async function getLatestAnnouncement() {
     },
   });
 }
+
+export async function createPersistedAnnouncement(input: {
+  body: string;
+  createdById: string;
+  title: string;
+}) {
+  return db.announcement.create({
+    data: input,
+  });
+}

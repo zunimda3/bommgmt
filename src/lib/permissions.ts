@@ -9,6 +9,10 @@ export function canManageUsers(role: DemoRole) {
   return role === 'owner';
 }
 
+export function canManageProjects(role: DemoRole) {
+  return role === 'owner' || role === 'admin';
+}
+
 export function canReadProject({ role, isAssigned }: ScopeInput) {
   if (role === 'owner' || role === 'admin') {
     return true;
@@ -23,6 +27,10 @@ export function canEditBom({ role, isAssigned }: ScopeInput) {
   }
 
   return role === 'designer' && isAssigned;
+}
+
+export function canManageModules({ role, isAssigned }: ScopeInput) {
+  return canEditBom({ role, isAssigned });
 }
 
 export function canEditPurchasing({ role, isAssigned }: ScopeInput) {
