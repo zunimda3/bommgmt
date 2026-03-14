@@ -18,28 +18,28 @@
 - Modify: `src/components/purchasing/purchasing-table.tsx`
 - Create: `tests/unit/purchasing-table.test.tsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add a test that renders the purchasing table with a row containing saved workflow fields and asserts that:
 - workflow column headers render
 - row cells render `status`, `supplier selected`, `quoted price`, `PO number`, and `notes`
 - empty values render a visible placeholder
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm vitest run tests/unit/purchasing-table.test.tsx`
 Expected: FAIL because the current table only renders aggregate fields.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Update `src/components/purchasing/purchasing-table.tsx` so it accepts the merged purchasing view row shape and renders workflow columns directly in the table.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm vitest run tests/unit/purchasing-table.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/purchasing/purchasing-table.tsx tests/unit/purchasing-table.test.tsx
@@ -55,7 +55,7 @@ git commit -m "test: cover purchasing workflow table visibility"
 - Modify: `src/components/purchasing/purchasing-workflow-form.tsx`
 - Modify: `tests/e2e/app.spec.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Extend the existing purchaser flow so it:
 - logs in as purchaser
@@ -63,19 +63,19 @@ Extend the existing purchaser flow so it:
 - saves workflow data for a purchasing row
 - verifies the refreshed table shows the saved workflow values
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm playwright test tests/e2e/app.spec.ts --grep "purchasing workflow"`
 Expected: FAIL because the current page does not render workflow values in the table and the form does not prefill from the selected row.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Update the purchasing page and workflow form so:
 - the page passes full merged purchasing rows into both the table and form
 - the form uses the selected row's current saved values as initial field values
 - the form still works for rows without existing workflow values
 
-- [ ] **Step 4: Run targeted tests to verify they pass**
+- [x] **Step 4: Run targeted tests to verify they pass**
 
 Run:
 - `pnpm vitest run tests/unit/purchasing-table.test.tsx`
@@ -83,7 +83,7 @@ Run:
 
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/app/'(app)'/projects/[projectId]/purchasing/page.tsx src/components/purchasing/purchasing-workflow-form.tsx tests/e2e/app.spec.ts
@@ -97,22 +97,22 @@ git commit -m "feat: surface purchasing workflow in table"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-03-15-purchasing-table-workflow.md`
 
-- [ ] **Step 1: Run unit coverage**
+- [x] **Step 1: Run unit coverage**
 
 Run: `pnpm vitest run tests/unit/purchasing-table.test.tsx tests/unit/purchasing-sync.test.ts`
 Expected: PASS
 
-- [ ] **Step 2: Run end-to-end coverage**
+- [x] **Step 2: Run end-to-end coverage**
 
 Run: `pnpm playwright test tests/e2e/app.spec.ts`
 Expected: PASS
 
-- [ ] **Step 3: Run build verification**
+- [x] **Step 3: Run build verification**
 
 Run: `pnpm build`
 Expected: PASS when run separately from Playwright
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-03-15-purchasing-table-workflow.md
